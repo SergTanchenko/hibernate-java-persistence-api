@@ -1,10 +1,10 @@
 package com.stanchenko.data.entities;
 
 import lombok.Data;
+import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.Date;
 
 @Table(name = "finances_user")
 @Entity
@@ -31,13 +31,13 @@ public class User {
     private String lastUpdatedBy;
 
     @Column(name = "LAST_UPDATED_DATE", nullable = false)
-    private Timestamp lastUpdatedDate;
+    private java.util.Date lastUpdatedDate;
 
-    @Column(name = "CREATED_BY", nullable = false)
+    @Column(name = "CREATED_BY", updatable = false)
     private String createdBy;
 
-    @Column(name = "CREATED_DATE", nullable = false)
-    private Timestamp createdDate;
+    @Column(name = "CREATED_DATE", updatable = false)
+    private Date createdDate;
 
     @Column(name = "USER_ADDRESS_LINE_1")
     private String userAddressLine1;
@@ -46,13 +46,14 @@ public class User {
     private String userAddressLine2;
 
     @Column(name = "CITY")
-    private String CITY;
+    private String city;
 
     @Column(name = "STATE")
-    private String STATE;
+    private String state;
 
     @Column(name = "ZIP_CODE")
     private String zipCode;
 
-    
+    @Formula("lower(datediff(curdate(), birth_date)/365)")
+    private int age;
 }
