@@ -15,6 +15,9 @@ public class User {
     @Column(name = "USER_ID", insertable = false, nullable = false)
     private Long userId;
 
+    @OneToOne(mappedBy = "user")
+    private Credential credential;
+
     @Column(name = "FIRST_NAME", nullable = false)
     private String firstName;
 

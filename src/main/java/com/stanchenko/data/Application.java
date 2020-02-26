@@ -34,13 +34,18 @@ public class Application {
             user.setZipCode("54321");
 
             Credential credential = new Credential();
-            credential.setUser(user);
             credential.setUsername("user2");
             credential.setPassword("pass1");
+
+            credential.setUser(user);
+            user.setCredential(credential);
 
             session.save(credential);
 
             transaction.commit();
+
+            User dbUser = (User) session.get(User.class, credential.getUser().getUserId());
+            log.info("User name from DB: {}", dbUser.getFirstName());
         } catch (Exception e) {
             log.error("Failed during save", e);
         } finally {
