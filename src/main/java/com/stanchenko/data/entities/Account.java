@@ -4,8 +4,9 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -23,7 +24,7 @@ public class Account {
     private String accountType;
 
     @Column(name = "NAME")
-    private String NAME;
+    private String name;
 
     @Column(name = "INITIAL_BALANCE", nullable = false)
     private BigDecimal initialBalance;
@@ -41,13 +42,15 @@ public class Account {
     private String lastUpdatedBy;
 
     @Column(name = "LAST_UPDATED_DATE")
-    private Timestamp lastUpdatedDate;
+    private Date lastUpdatedDate;
 
     @Column(name = "CREATED_BY")
     private String createdBy;
 
     @Column(name = "CREATED_DATE")
-    private Timestamp createdDate;
+    private Date createdDate;
 
-    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
+    private List<Transaction> transactionList = new ArrayList<>();
 }
