@@ -1,5 +1,6 @@
 package com.stanchenko.data;
 
+import com.stanchenko.data.entities.Credential;
 import com.stanchenko.data.entities.User;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
@@ -14,6 +15,7 @@ public class HibernateUtils {
         try {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(User.class);
+            configuration.addAnnotatedClass(Credential.class);
             return configuration.buildSessionFactory(new StandardServiceRegistryBuilder().build());
         } catch (Exception e) {
             throw new RuntimeException("Can't initialize session factory", e);

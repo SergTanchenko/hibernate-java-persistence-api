@@ -1,11 +1,14 @@
 package com.stanchenko.data;
 
+import com.stanchenko.data.entities.Credential;
 import com.stanchenko.data.entities.User;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import java.util.Date;
 
+@Slf4j
 public class Application {
 
     public static void main(String[] args) {
@@ -30,13 +33,16 @@ public class Application {
             user.setState("ST");
             user.setZipCode("54321");
 
+            Credential credential = new Credential();
+            credential.setUser(user);
+            credential.setUsername("user2");
+            credential.setPassword("pass1");
 
-            session.save(user);
+            session.save(credential);
+
             transaction.commit();
-
-
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Failed during save", e);
         } finally {
             session.close();
             HibernateUtils.getSessionFactory().close();
