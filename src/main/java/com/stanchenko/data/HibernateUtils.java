@@ -1,9 +1,6 @@
 package com.stanchenko.data;
 
-import com.stanchenko.data.entities.Account;
-import com.stanchenko.data.entities.Credential;
-import com.stanchenko.data.entities.Transaction;
-import com.stanchenko.data.entities.User;
+import com.stanchenko.data.entities.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -17,6 +14,7 @@ public class HibernateUtils {
         try {
             Configuration configuration = new Configuration();
             configuration.addAnnotatedClass(Account.class);
+            configuration.addAnnotatedClass(Budget.class);
             configuration.addAnnotatedClass(Credential.class);
             configuration.addAnnotatedClass(User.class);
             configuration.addAnnotatedClass(Transaction.class);

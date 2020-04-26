@@ -3,54 +3,47 @@ package com.stanchenko.data.entities;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "account")
+@Table(name = "ACCOUNT")
 @Data
-public class Account {
+public class Account implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "account")
+    List<Transaction> transactions = new ArrayList<>();
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ACCOUNT_ID", insertable = false, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ACCOUNT_ID")
     private Long accountId;
-
-    @Column(name = "BANK_ID")
-    private Long bankId;
-
-    @Column(name = "ACCOUNT_TYPE")
-    private String accountType;
-
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "INITIAL_BALANCE", nullable = false)
+    @Column(name = "INITIAL_BALANCE")
     private BigDecimal initialBalance;
 
-    @Column(name = "CURRENT_BALANCE", nullable = false)
+    @Column(name = "CURRENT_BALANCE")
     private BigDecimal currentBalance;
 
-    @Column(name = "OPEN_DATE", nullable = false)
+    @Column(name = "OPEN_DATE")
     private Date openDate;
 
-    @Column(name = "CLOSE_DATE", nullable = false)
+    @Column(name = "CLOSE_DATE")
     private Date closeDate;
-
-    @Column(name = "LAST_UPDATED_BY", nullable = false)
-    private String lastUpdatedBy;
 
     @Column(name = "LAST_UPDATED_DATE")
     private Date lastUpdatedDate;
 
-    @Column(name = "CREATED_BY")
-    private String createdBy;
+    @Column(name = "LAST_UPDATED_BY")
+    private String lastUpdatedBy;
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ACCOUNT_ID", nullable = false)
-    private List<Transaction> transactionList = new ArrayList<>();
+    @Column(name = "CREATED_BY")
+    private String createdBy;
 }

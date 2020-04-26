@@ -1,16 +1,11 @@
 package com.stanchenko.data;
 
-import com.stanchenko.data.entities.Account;
-import com.stanchenko.data.entities.Credential;
-import com.stanchenko.data.entities.Transaction;
-import com.stanchenko.data.entities.User;
+import com.stanchenko.data.entities.*;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
-;
 
 @Slf4j
 public class Application {
@@ -18,28 +13,34 @@ public class Application {
     public static void main(String[] args) {
         Session session = HibernateUtils.getSessionFactory().openSession();
 
-        org.hibernate.Transaction transaction = session.beginTransaction();
-
         try {
-            Account account = createNewAccount();
-            account.getTransactionList().add(createShoePurchase());
-            account.getTransactionList().add(createNewBeltPurchase());
+            org.hibernate.Transaction transaction = session.beginTransaction();
 
-            session.save(account);
+            Account account = createNewAccount();
+
+            Budget budget = new Budget();
+            budget.setGoalAmount(new BigDecimal("10000.00"));
+            budget.setName("Emergency Fund");
+            budget.setPeriod("Yearly");
+
+            budget.getTransactions().add(createNewBeltPurchase(account));
+            budget.getTransactions().add(createShoePurchase(account));
+
+            session.save(budget);
             transaction.commit();
 
-            Transaction dbTransaction = (Transaction) session.get(Transaction.class, account.getTransactionList().get(0).getTransactionId());
-            log.info("Db transaction title: {}", dbTransaction.getTitle());
+
         } catch (Exception e) {
-            log.error("Failed during save", e);
+            e.printStackTrace();
         } finally {
             session.close();
             HibernateUtils.getSessionFactory().close();
         }
     }
 
-    private static Transaction createNewBeltPurchase() {
+    private static Transaction createNewBeltPurchase(Account account) {
         Transaction beltPurchase = new Transaction();
+        beltPurchase.setAccount(account);
         beltPurchase.setTitle("Dress Belt");
         beltPurchase.setAmount(new BigDecimal("50.00"));
         beltPurchase.setClosingBalance(new BigDecimal("0.00"));
@@ -53,8 +54,9 @@ public class Application {
         return beltPurchase;
     }
 
-    private static Transaction createShoePurchase() {
+    private static Transaction createShoePurchase(Account account) {
         Transaction shoePurchase = new Transaction();
+        shoePurchase.setAccount(account);
         shoePurchase.setTitle("Work Shoes");
         shoePurchase.setAmount(new BigDecimal("100.00"));
         shoePurchase.setClosingBalance(new BigDecimal("0.00"));
